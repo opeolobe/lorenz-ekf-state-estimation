@@ -8,7 +8,7 @@ from scipy.linalg import cho_factor, cho_solve
 
 
 ##*** Extended Kalman Filter ***###
-class ExtendedKalmanFilter():
+class ExtendedKalmanFilter:
     def __init__(self, x0, P0, Q, R):
         self.x = np.asarray(x0, dtype=np.float64).reshape(-1)   # Initial states (n,)
         self.P = np.asarray(P0, dtype=np.float64)               # Initial state covariance matrix

@@ -1,0 +1,74 @@
+# =========================
+# Python cache & compiled
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# =========================
+# Virtual environments
+# =========================
+.venv/
+.myvenv/
+venv/
+env/
+ENV/
+
+# =========================
+# Jupyter
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# VS Code / IDE
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+
+# =========================
+# Data (adjust carefully)
+# =========================
+data/
+!data/README.md
+
+# =========================
+# Results / outputs
+# =========================
+results/
+outputs/
+figures/
+
+# =========================
+# Model files (DL / ML)
+# =========================
+*.pt
+*.pth
+*.ckpt
+*.h5
+*.pkl
+*.joblib
+
+# =========================
+# Experiment tracking
+# =========================
+wandb/
+mlruns/
+optuna_studies/
+
+# =========================
+# Temporary files
+# =========================
+*.tmp
+*.swp

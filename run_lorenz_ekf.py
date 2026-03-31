@@ -38,7 +38,7 @@ def run_lorenz_ekf(cfg: DataConfig, p: LorenzParameters, N: int = 50):
     for seq in range(N):
         x_true, y_meas = simulate_sequence(cfg, p)                      # Simulate a long sequence
         x_est = np.zeros((cfg.T, x_true.shape[1]), dtype=np.float64)    # Estimated states
-        x0 = x_true[0]                                                  # Initial states
+        x0 = x_true[0].copy()                                           # Initial states
         P0 = np.diag([0.01]*x_true.shape[1])                            # Initial state covariance
         Q = np.diag([0.2**2]*x_true.shape[1])                           # Process noise covariance (Tunable)
         R = np.diag([0.5**2]*y_meas.shape[1])                           # Measurement noise covariance (Tunable)
@@ -51,7 +51,7 @@ def run_lorenz_ekf(cfg: DataConfig, p: LorenzParameters, N: int = 50):
             x_hat, Pk, nis = ekf.update(y=y_meas[k], H=H)
 
             # Compute normalized estimation error squared (nees)
-            error = x_true[k] - x_hat
+            error = x_true[k + 1] - x_hat
             c, lower = cho_factor(Pk, check_finite=False)
             nees = float(error.T @ cho_solve((c, lower), error, check_finite=False))
 
@@ -61,6 +61,7 @@ def run_lorenz_ekf(cfg: DataConfig, p: LorenzParameters, N: int = 50):
             nees_log[seq, k] = nees
 
         # Log variables
+        x_true = x_true[1:]                                           # Drop the initial state
         error = x_true - x_est         
         rmse_per_state = np.sqrt(np.mean(error**2, axis=0))
         x_rmse, y_rmse, z_rmse = rmse_per_state

@@ -58,7 +58,7 @@ def jacobian_continuous(x: np.ndarray, p:LorenzParameters):
     J[0, 2] = 0.0
     J[1, 0] = rho - x[2]
     J[1, 1] = -1.0
-    J[1, 2] = x[0]
+    J[1, 2] = -x[0]
     J[2, 0] = x[1]
     J[2, 1] = x[0]
     J[2, 2] = -beta
@@ -72,7 +72,7 @@ def discrete_F(x: np.ndarray, dt: float, p:LorenzParameters):
 
 
 
-def ouputMatrix():
+def outputMatrix():
     """Linear output matrix for the lorenz system."""
     H = np.zeros((2, 3), dtype=np.float64)      # 2 outputs and 3 states
     H[0, 0] = 1.0                               # for x
@@ -89,14 +89,21 @@ def simulate_sequence(cfg: DataConfig, p: LorenzParameters):
 
     x = np.random.uniform(-cfg.x0_range, cfg.x0_range, size=(3,)).astype(np.float64)            # Initial condition for states
 
-    x_true = np.zeros((T, 3), dtype=np.float64)                                                 # Ground truth states for evaluation
+    # store x0, x1, ..., xT
+    x_true = np.zeros((T+1, 3), dtype=np.float64)                                               # Ground truth states for evaluation
+
+    # store y1, y2, ..., yT
     y_meas = np.zeros((T, 2), dtype=np.float64)                                                 # Measured outputs
 
+    x_true[0] = x
+
     for k in range(T):
+        # Propagate from xk to x(k+1)
         x = rk4_step(x, dt, p)
         x += np.random.normal(loc=0.0, scale=w_std, size=x.shape)                               # Process noise
-        x_true[k] = x                                                                           # Store ground truth states
+        x_true[k + 1] = x                                                                       # Store ground truth states
 
+        # measurement at time k+1
         y = np.array([x[0], x[2]], dtype=np.float64)                                            # Selected outputs
         y += np.array([np.random.randn()* x_std, np.random.randn() * z_std], dtype=np.float64)  # Measurement noise
         y_meas[k] = y

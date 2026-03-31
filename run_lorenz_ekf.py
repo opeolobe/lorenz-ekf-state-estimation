@@ -15,7 +15,7 @@ Lorenz has 3 states (x, y and z). Two of them (x and z) are measured as output c
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.linalg import cho_factor, cho_solve
-from lorenz import simulate_sequence, ouputMatrix, lorenz_f, discrete_F, LorenzParameters, DataConfig
+from lorenz import simulate_sequence, outputMatrix, lorenz_f, discrete_F, LorenzParameters, DataConfig
 from ekf import ExtendedKalmanFilter
 from plots import plot_state_estimates, plot_nis_and_nees
 
@@ -42,7 +42,7 @@ def run_lorenz_ekf(cfg: DataConfig, p: LorenzParameters, N: int = 50):
         P0 = np.diag([0.01]*x_true.shape[1])                            # Initial state covariance
         Q = np.diag([0.2**2]*x_true.shape[1])                           # Process noise covariance (Tunable)
         R = np.diag([0.5**2]*y_meas.shape[1])                           # Measurement noise covariance (Tunable)
-        H = ouputMatrix()                                               # Output matrix
+        H = outputMatrix()                                               # Output matrix
 
         ekf = ExtendedKalmanFilter(x0=x0, P0=P0, Q=Q, R=R)              # Ekf object
 
